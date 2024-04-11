@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Rental.Management.Final.Data;
 using Rental.Management.Final.Models;
 
@@ -56,10 +57,15 @@ namespace Rental.Management.Final.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,Address,IsOccupied,Price")] RentalProperty rentalProperty)
+        public async Task<IActionResult> Create([Bind("Id,Description,Address,IsOccupied,Price,PropertyFiles")] RentalProperty rentalProperty)
         {
             if (ModelState.IsValid)
             {
+                using (var ms = new MemoryStream())
+                {
+                    rentalProperty.PropertyFiles.First().CopyTo(ms);
+                    rentalProperty.Image = ms.ToArray();
+                }
                 _context.Add(rentalProperty);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

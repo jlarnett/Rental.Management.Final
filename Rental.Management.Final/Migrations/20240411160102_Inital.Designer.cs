@@ -12,8 +12,8 @@ using Rental.Management.Final.Data;
 namespace Rental.Management.Final.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240409163142_UpdatingPaymentModel")]
-    partial class UpdatingPaymentModel
+    [Migration("20240411160102_Inital")]
+    partial class Inital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
