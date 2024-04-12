@@ -12,8 +12,8 @@ using Rental.Management.Final.Data;
 namespace Rental.Management.Final.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240411160102_Inital")]
-    partial class Inital
+    [Migration("20240412002812_changingRentalProperty")]
+    partial class changingRentalProperty
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,7 +36,7 @@ namespace Rental.Management.Final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RentalPropertyId")
+                    b.Property<int?>("RentalPropertyId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -91,6 +91,9 @@ namespace Rental.Management.Final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<bool>("IsOccupied")
                         .HasColumnType("bit");
 
@@ -106,9 +109,7 @@ namespace Rental.Management.Final.Migrations
                 {
                     b.HasOne("Rental.Management.Final.Models.RentalProperty", "RentalProperty")
                         .WithMany("Customers")
-                        .HasForeignKey("RentalPropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RentalPropertyId");
 
                     b.Navigation("RentalProperty");
                 });

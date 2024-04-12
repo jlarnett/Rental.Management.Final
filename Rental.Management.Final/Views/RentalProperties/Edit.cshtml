@@ -28,6 +28,7 @@
                     <input class="form-check-input" asp-for="IsOccupied" /> @Html.DisplayNameFor(model => model.IsOccupied)
                 </label>
             </div>
+            @Html.HiddenFor(c => c.Image)
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />

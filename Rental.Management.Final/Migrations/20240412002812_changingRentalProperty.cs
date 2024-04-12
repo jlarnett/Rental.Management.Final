@@ -1,27 +1,26 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Rental.Management.Final.Migrations
 {
-    public partial class updatedFormFile : Migration
+    public partial class changingRentalProperty : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "PropertyImage",
+                name: "ImageUrl",
                 table: "RentalProperties");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<byte[]>(
-                name: "PropertyImage",
+            migrationBuilder.AddColumn<string>(
+                name: "ImageUrl",
                 table: "RentalProperties",
-                type: "varbinary(max)",
+                type: "nvarchar(max)",
                 nullable: false,
-                defaultValue: new byte[0]);
+                defaultValue: "");
         }
     }
 }

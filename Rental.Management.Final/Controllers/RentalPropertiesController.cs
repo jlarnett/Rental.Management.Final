@@ -82,6 +82,7 @@ namespace Rental.Management.Final.Controllers
             }
 
             var rentalProperty = await _context.RentalProperties.FindAsync(id);
+
             if (rentalProperty == null)
             {
                 return NotFound();

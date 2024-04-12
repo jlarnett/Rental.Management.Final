@@ -92,10 +92,6 @@ namespace Rental.Management.Final.Migrations
                     b.Property<byte[]>("Image")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsOccupied")
                         .HasColumnType("bit");
 

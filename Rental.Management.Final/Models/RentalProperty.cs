@@ -10,12 +10,11 @@ public class RentalProperty
     public string Address { get; set; } = string.Empty;
     public bool IsOccupied { get; set; } = false;
     public double Price { get; set; }
-    public string ImageUrl { get; set; } = string.Empty;
     public byte[]? Image { get; set; }
 
     [FromForm]
     [NotMapped]
-    public IFormFileCollection PropertyFiles { get; set; }
+    public IFormFileCollection? PropertyFiles { get; set; }
     public List<Customer> Customers { get; set; } = new List<Customer>();
 
 }
