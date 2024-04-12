@@ -151,6 +151,7 @@ namespace Rental.Management.Final.Controllers
                         }
                     }
 
+                    await DeleteOldPropertyImagesFromDb(id);
                     await SaveImages(id, rentalProperty.PropertyFiles!);
                     _context.Update(rentalProperty);
                     await _context.SaveChangesAsync();
@@ -169,6 +170,18 @@ namespace Rental.Management.Final.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(rentalProperty);
+        }
+
+        /// <summary>
+        /// Removes all the old images from property. Used when editing property.
+        /// </summary>
+        /// <param name="propertyId"></param>
+        /// <returns></returns>
+        private async Task DeleteOldPropertyImagesFromDb(int propertyId)
+        {
+            var images = await _context.PropertyImages.Where(c => c.PropertyId.Equals(propertyId)).ToListAsync();
+            _context.RemoveRange(images);
+            await _context.SaveChangesAsync();
         }
 
         // GET: RentalProperties/Delete/5
