@@ -1,8 +1,48 @@
-﻿@{
+﻿@model Rental.Management.Final.Views.Home.HomeVm
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-1 text-warning">
+        Welcome 
+    </h1>
+    <div class="h3">
+        At JTG Rental Company. We pride ourselves on giving our customers
+        The best service, price, and options available on the rental market today!
+    </div>
+    <div class="h3 text-">
+        Take a look at some of our available rentals below.
+    </div>
+</div>
+
+<div class="row">
+    
+    @{
+        int counter = 0;
+
+        foreach (var property in Model.DisplayProperties)
+        {
+            if (property.PropertyImages.Count > 0)
+            {
+                var firstImageString = Convert.ToBase64String(property.PropertyImages.First());
+
+                if (counter < 3)
+                {
+                    <div class="col">
+                        <div class="card home-card">
+                            <img src="data:image/jpeg;base64, @firstImageString" class="card-img-top" alt="@property.Description">
+                            <div class="card-body">
+                                <h5 class="card-title">@property.Address</h5>
+                                <p class="card-text">@property.Description</p>
+                                <a class="btn btn-outline-warning"  asp-controller="RentalProperties" asp-action="Details" asp-route-id="@property.Id">View Rental</a>
+                            </div>
+                        </div>
+                    </div>
+                    counter++;
+                }
+            }
+        }
+    }
+
 </div>
