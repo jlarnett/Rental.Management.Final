@@ -2,3 +2,11 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+
+PropertyFiles.onchange = evt => {
+    const [file] = PropertyFiles.files
+    if (file) {
+        PropertyPreviewImage.src = URL.createObjectURL(file);
+    }
+}

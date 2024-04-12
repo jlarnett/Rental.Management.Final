@@ -95,7 +95,7 @@ namespace Rental.Management.Final.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Address,IsOccupied,Price")] RentalProperty rentalProperty)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Address,IsOccupied,Price,PropertyFiles")] RentalProperty rentalProperty)
         {
             if (id != rentalProperty.Id)
             {
@@ -106,6 +106,11 @@ namespace Rental.Management.Final.Controllers
             {
                 try
                 {
+                    using (var ms = new MemoryStream())
+                    {
+                        rentalProperty.PropertyFiles.First().CopyTo(ms);
+                        rentalProperty.Image = ms.ToArray();
+                    }
                     _context.Update(rentalProperty);
                     await _context.SaveChangesAsync();
                 }

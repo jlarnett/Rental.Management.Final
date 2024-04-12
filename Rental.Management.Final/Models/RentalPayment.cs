@@ -1,4 +1,6 @@
-﻿namespace Rental.Management.Final.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Rental.Management.Final.Models
 {
     public class RentalPayment
     {
@@ -7,8 +9,7 @@
         public Customer? Customer { get; set; }
         public int RentalPropertyId { get; set; }
         public RentalProperty? Property { get; set; }
-
-        public double PaymentAmount { get; set; }
+        [Column(TypeName = "money")] public double PaymentAmount { get; set; }
         public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
     }
 }

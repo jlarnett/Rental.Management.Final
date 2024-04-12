@@ -4,13 +4,11 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>RentalProperty</h4>
+<h2 class="text-center">Modify Rental Property</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -34,8 +32,26 @@
                 <input asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+            <div id="PropertyPreviewImageContainer" class="form-group ">
+                @{
+                    if (Model.Image != null)
+                    {
+                        var imageString = Convert.ToBase64String(Model.Image);
+                        <img id="PropertyPreviewImage" alt="preview image" class="img-fluid" src="data:image/jpeg;base64, @imageString" />
+                    }
+                    else
+                    {
+                        <img id="PropertyPreviewImage" alt="preview image" class="img-fluid"/>
+                    }
+                }
+            </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="PropertyFiles" class="control-label"></label>
+                <input asp-for="PropertyFiles" type="file" class="form-control" />
+                <span asp-validation-for="PropertyFiles" class="text-danger"></span>
+            </div>
+            <div class="form-group d-grid gap-2">
+                <input type="submit" value="Save Changes" class="btn btn-outline-success" />
             </div>
         </form>
     </div>
