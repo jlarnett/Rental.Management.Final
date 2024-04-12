@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Rental.Management.Final.Data;
+using Rental.Management.Final.Services.FileExtensionValidator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddControllersWithViews();
 //Connection string setup
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddTransient<IFileExtensionValidator, FileExtensionValidator>();
 
 
 var app = builder.Build();

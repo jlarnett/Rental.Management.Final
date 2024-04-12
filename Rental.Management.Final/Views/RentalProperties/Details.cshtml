@@ -1,5 +1,5 @@
 ﻿@using System.Drawing
-@model Rental.Management.Final.Models.RentalProperty
+@model Rental.Management.Final.Views.RentalProperties.PropertyVm
 
 @{
     ViewData["Title"] = "Details";
@@ -40,9 +40,10 @@
         </dl>
         <div class="col">
             @{
-                if (Model.Image != null)
+
+                foreach (var image in Model.PropertyImages)
                 {
-                    var imageString = Convert.ToBase64String(Model.Image);
+                    var imageString = Convert.ToBase64String(image);
                     <img class="img-fluid" alt="Rental Picture" src="data:image/jpeg;base64, @imageString" />
                 }
             }
