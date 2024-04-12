@@ -21,7 +21,7 @@ namespace Rental.Management.Final.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var properties = await _context.RentalProperties.ToListAsync();
+            var properties = await _context.RentalProperties.Where(p => p.IsOccupied != true).ToListAsync();
 
             List<PropertyVm> propertiesVms = new List<PropertyVm>();
 
@@ -48,6 +48,8 @@ namespace Rental.Management.Final.Controllers
                 propertiesVms.Add(vm);
             }
 
+            propertiesVms = RandomizePropertyList(propertiesVms);
+
             var IndexVm = new HomeVm()
             {
                 DisplayProperties = propertiesVms
@@ -64,6 +66,12 @@ namespace Rental.Management.Final.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private List<PropertyVm> RandomizePropertyList(List<PropertyVm> listToShuffle)
+        {
+            var shuffledList = listToShuffle.OrderBy(_ => Guid.NewGuid()).ToList();
+            return shuffledList;
         }
     }
 }
