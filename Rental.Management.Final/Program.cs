@@ -1,3 +1,4 @@
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Rental.Management.Final.Data;
@@ -11,9 +12,14 @@ builder.Services.AddControllersWithViews();
 //Connection string setup
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddHangfire(options =>
+{
+    options.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 
 builder.Services.AddTransient<IFileExtensionValidator, FileExtensionValidator>();
-
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -31,6 +37,11 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseHangfireDashboard("/hangfire", new DashboardOptions()
+{
+});
+
 
 app.MapControllerRoute(
     name: "default",
