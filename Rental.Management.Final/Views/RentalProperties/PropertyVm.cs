@@ -14,7 +14,6 @@ namespace Rental.Management.Final.Views.RentalProperties
 
         [DisplayName("Daily Fee")]
         public double Price { get; set; }
-        public byte[]? Image { get; set; }
 
         public List<byte[]>? PropertyImages { get; set; }
 

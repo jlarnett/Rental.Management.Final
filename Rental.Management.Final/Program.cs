@@ -1,7 +1,9 @@
+using AutoMapper;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Rental.Management.Final.Data;
+using Rental.Management.Final.Profiles;
 using Rental.Management.Final.Services.FileExtensionValidator;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,9 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    //Automapper configuration.
+    mc.AddProfile(new MappingProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
 //Connection string setup
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddSingleton(mapper);
 builder.Services.AddHangfire(options =>
 {
     options.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));

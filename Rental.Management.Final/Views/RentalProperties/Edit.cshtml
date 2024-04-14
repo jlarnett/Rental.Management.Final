@@ -1,4 +1,4 @@
-﻿@model Rental.Management.Final.Models.RentalProperty
+﻿@model Rental.Management.Final.Views.RentalProperties.PropertyVm
 
 @{
     ViewData["Title"] = "Edit";
@@ -26,7 +26,6 @@
                     <input class="form-check-input" asp-for="IsOccupied" /> @Html.DisplayNameFor(model => model.IsOccupied)
                 </label>
             </div>
-            @Html.HiddenFor(c => c.Image)
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
@@ -34,14 +33,17 @@
             </div>
             <div id="PropertyPreviewImageContainer" class="form-group ">
                 @{
-                    if (Model.Image != null)
+                    if (Model.PropertyImages != null)
                     {
-                        var imageString = Convert.ToBase64String(Model.Image);
-                        <img id="PropertyPreviewImage" alt="preview image" class="img-fluid" src="data:image/jpeg;base64, @imageString" />
-                    }
-                    else
-                    {
-                        <img id="PropertyPreviewImage" alt="preview image" class="img-fluid"/>
+                        if (Model.PropertyImages.Count > 0)
+                        {
+                            var imageString = Convert.ToBase64String(Model.PropertyImages.First());
+                            <img id="PropertyPreviewImage" alt="preview image" class="img-fluid" src="data:image/jpeg;base64, @imageString" />
+                        }
+                        else
+                        {
+                            <img id="PropertyPreviewImage" alt="preview image" class="img-fluid"/>
+                        }
                     }
                 }
             </div>

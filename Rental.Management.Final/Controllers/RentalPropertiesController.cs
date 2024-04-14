@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,13 @@ namespace Rental.Management.Final.Controllers
     {
         private readonly ApplicationContext _context;
         private readonly IFileExtensionValidator _validator;
+        private readonly IMapper _mapper;
 
-        public RentalPropertiesController(ApplicationContext context, IFileExtensionValidator validator)
+        public RentalPropertiesController(ApplicationContext context, IFileExtensionValidator validator, IMapper mapper)
         {
             _context = context;
             _validator = validator;
+            _mapper = mapper;
         }
 
         // GET: RentalProperties
@@ -42,23 +45,8 @@ namespace Rental.Management.Final.Controllers
 
             var rentalProperty = await _context.RentalProperties
                 .FirstOrDefaultAsync(m => m.Id == id);
-            var propertyImages = await _context.PropertyImages.Where(p => p.PropertyId.Equals(id)).ToListAsync();
-            List<byte[]> images = new List<byte[]>();
-            foreach (var image in propertyImages)
-            {
-                images.Add(image.Image);
-            }
 
-            var propertyVm = new PropertyVm()
-            {
-                Id = rentalProperty.Id,
-                Address = rentalProperty.Address,
-                Description = rentalProperty.Description,
-                Price = rentalProperty.Price,
-                IsOccupied = rentalProperty.IsOccupied,
-                Customers = rentalProperty.Customers,
-                PropertyImages = images,
-            };
+            var propertyVm = await MapToPropertyVm(rentalProperty);
 
             if (rentalProperty == null)
             {
@@ -114,15 +102,16 @@ namespace Rental.Management.Final.Controllers
                 return NotFound();
             }
 
-
-
             var rentalProperty = await _context.RentalProperties.FindAsync(id);
 
             if (rentalProperty == null)
             {
                 return NotFound();
             }
-            return View(rentalProperty);
+
+            var vm = await MapToPropertyVm(rentalProperty);
+
+            return View(vm);
         }
 
         // POST: RentalProperties/Edit/5
@@ -130,7 +119,7 @@ namespace Rental.Management.Final.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Address,IsOccupied,Price,PropertyFiles")] RentalProperty rentalProperty)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Address,IsOccupied,Price,PropertyFiles")] PropertyVm rentalProperty)
         {
             if (id != rentalProperty.Id)
             {
@@ -153,7 +142,10 @@ namespace Rental.Management.Final.Controllers
 
                     await DeleteOldPropertyImagesFromDb(id);
                     await SaveImages(id, rentalProperty.PropertyFiles!);
-                    _context.Update(rentalProperty);
+
+                    var property = MapToRentalProperty(rentalProperty);
+
+                    _context.Update(property);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -243,6 +235,46 @@ namespace Rental.Management.Final.Controllers
 
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task<PropertyVm> MapToPropertyVm(RentalProperty rentalProperty)
+        {
+            var propertyImages = await _context.PropertyImages.Where(p => p.PropertyId.Equals(rentalProperty.Id))
+                .ToListAsync();
+            var images = new List<byte[]>();
+
+            foreach (var image in propertyImages)
+                images.Add(image.Image);
+
+            var vm = new PropertyVm()
+            {
+                Id = rentalProperty.Id,
+                Address = rentalProperty.Address,
+                Description = rentalProperty.Description,
+                Customers = rentalProperty.Customers,
+                Price = rentalProperty.Price,
+                IsOccupied = rentalProperty.IsOccupied,
+                PropertyFiles = rentalProperty.PropertyFiles,
+                PropertyImages = images
+            };
+
+            return vm;
+        }
+
+        private RentalProperty MapToRentalProperty(PropertyVm rentalProperty)
+        {
+            var property = new RentalProperty()
+            {
+                Id = rentalProperty.Id,
+                Address = rentalProperty.Address,
+                Description = rentalProperty.Description,
+                Customers = rentalProperty.Customers,
+                Price = rentalProperty.Price,
+                IsOccupied = rentalProperty.IsOccupied,
+                PropertyFiles = rentalProperty.PropertyFiles,
+            };
+
+            return property;
         }
     }
 }
