@@ -1,30 +1,59 @@
-﻿@model Rental.Management.Final.Models.RentalContract
+﻿@model Rental.Management.Final.Models.ContractPayment
 
 @{
     //ViewData["Title"] = "Create";
 }
 
-<h2 class="text-center">Reserve Rental Property</h2>
+<h2 class="text-center">Pay For Reservation</h2>
 <hr />
 <div class="row">
     <form asp-action="Create">
         <div class="col row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CardHolderName" class="control-label"></label>
+                <input asp-for="CardHolderName" class="form-control" />
+                <span asp-validation-for="CardHolderName" class="text-danger"></span>
+            </div>
+
+
             <div class="form-group col">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
+                <label asp-for="CardExpMonth" class="control-label"></label>
+                <input asp-for="CardExpMonth" class="form-control" />
+                <span asp-validation-for="CardExpMonth" class="text-danger"></span>
             </div>
             <div class="form-group col">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+                <label asp-for="CardExpYear" class="control-label"></label>
+                <input asp-for="CardExpYear" class="form-control" />
+                <span asp-validation-for="CardExpYear" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CustomerId" class="control-label"></label>
-                <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerId"></select>
             </div>
-            @Html.HiddenFor(c => c.PropertyId)
+            @Html.HiddenFor(c => c.Amount)
+            <div class="form-group col">
+                <label asp-for="CardType" class="control-label"></label>
+                
+                <select id="CardType" name="CardType" class="form-control">
+                    <option>Visa</option>
+                    <option>Discover</option>
+                    <option>MasterCard</option>
+                    <option>American Express</option>
+                </select>
+                
+                <span asp-validation-for="CardType" class="text-danger"></span>
+
+            </div>
+            <div class="form-group col">
+                <label asp-for="CardNumber" class="control-label"></label>
+                <input asp-for="CardNumber" class="form-control" />
+                <span asp-validation-for="CardNumber" class="text-danger"></span>
+            </div>
+
+            @Html.HiddenFor(p => p.Date)
+            @Html.HiddenFor(c => c.ContractId)
+            
+
+
             <div class="form-group d-grid gap-2">
                 <input type="submit" value="Create" class="btn btn-outline-success" />
             </div>

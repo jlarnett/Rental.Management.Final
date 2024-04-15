@@ -41,9 +41,20 @@ namespace Rental.Management.Final.Controllers
             {
                 await _context.AddAsync(contract);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(CreateContractPayment));
             }
             return View(contract);
         }
+
+        // GET: RentalContracts
+        public IActionResult CreateContractPayment(int id)
+        {
+            return View("Payment", new ContractPayment()
+            {
+                Date = DateTime.UtcNow
+            });
+        }
     }
+
+
 }

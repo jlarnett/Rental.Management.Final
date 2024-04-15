@@ -1,16 +1,38 @@
-﻿namespace Rental.Management.Final.Models
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace Rental.Management.Final.Models
 {
     public class ContractPayment
     {
         public int Id { get; set; }
-        public int CardHolderName { get; set; }
+
+        [DisplayName("Card Holder")]
+        public string CardHolderName { get; set; }
+
+        [DisplayName("Card Type")]
         public string CardType { get; set; }
-        public long CardNumber { get; set; }
-        public int CardExpMonth { get; set; }
-        public int CardExpYear { get; set; }
+
+        [MaxLength(16)]
+        [MinLength(16)]
+        [DisplayName("Credit Card Number")]
+        public string CardNumber { get; set; }
+
+        [DisplayName("Expiration Month")]
+        [MinLength(2)]
+        [MaxLength(2)]
+        public string CardExpMonth { get; set; }
+
+        [DisplayName("Expiration Year")]
+        [Required]
+        [MinLength(4)]
+        [MaxLength(4)]
+        public string CardExpYear { get; set; }
+
         public double Amount { get; set; }
 
         public int ContractId { get; set; }
         public RentalContract? Contract { get; set; }
+        public DateTime Date { get; set; }
     }
 }
