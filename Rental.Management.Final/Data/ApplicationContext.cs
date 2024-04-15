@@ -14,5 +14,6 @@ namespace Rental.Management.Final.Data
         public DbSet<RentalPayment> RentalPayments { get; set; }
         public DbSet<PropertyImage> PropertyImages { get; set; }
         public DbSet<RentalContract> RentalContracts { get; set; }
+        public DbSet<ContractPayment> ContractPayments { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rental.Management.Final.Data;
 
@@ -11,9 +12,10 @@ using Rental.Management.Final.Data;
 namespace Rental.Management.Final.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20240415161900_PaymentContract")]
+    partial class PaymentContract
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,43 +23,6 @@ namespace Rental.Management.Final.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Rental.Management.Final.Models.ContractPayment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<int>("CardExpMonth")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CardExpYear")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CardHolderName")
-                        .HasColumnType("int");
-
-                    b.Property<long>("CardNumber")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("CardType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ContractId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContractId");
-
-                    b.ToTable("ContractPayments");
-                });
 
             modelBuilder.Entity("Rental.Management.Final.Models.Customer", b =>
                 {
@@ -207,17 +172,6 @@ namespace Rental.Management.Final.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RentalProperties");
-                });
-
-            modelBuilder.Entity("Rental.Management.Final.Models.ContractPayment", b =>
-                {
-                    b.HasOne("Rental.Management.Final.Models.RentalContract", "Contract")
-                        .WithMany()
-                        .HasForeignKey("ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contract");
                 });
 
             modelBuilder.Entity("Rental.Management.Final.Models.Customer", b =>
