@@ -22,8 +22,9 @@ namespace Rental.Management.Final.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var applicationContext = _context.Customers.Include(c => c.RentalProperty);
-            return View(await applicationContext.ToListAsync());
+              return _context.Customers != null ? 
+                          View(await _context.Customers.ToListAsync()) :
+                          Problem("Entity set 'ApplicationContext.Customers'  is null.");
         }
 
         // GET: Customers/Details/5
@@ -35,7 +36,6 @@ namespace Rental.Management.Final.Controllers
             }
 
             var customer = await _context.Customers
-                .Include(c => c.RentalProperty)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -48,7 +48,6 @@ namespace Rental.Management.Final.Controllers
         // GET: Customers/Create
         public IActionResult Create()
         {
-            ViewData["RentalPropertyId"] = new SelectList(_context.RentalProperties, "Id", "Id");
             return View();
         }
 
@@ -57,7 +56,7 @@ namespace Rental.Management.Final.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,RentalPropertyId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Address,PhoneNumber")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +64,6 @@ namespace Rental.Management.Final.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RentalPropertyId"] = new SelectList(_context.RentalProperties, "Id", "Id", customer.RentalPropertyId);
             return View(customer);
         }
 
@@ -82,7 +80,6 @@ namespace Rental.Management.Final.Controllers
             {
                 return NotFound();
             }
-            ViewData["RentalPropertyId"] = new SelectList(_context.RentalProperties, "Id", "Id", customer.RentalPropertyId);
             return View(customer);
         }
 
@@ -91,7 +88,7 @@ namespace Rental.Management.Final.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RentalPropertyId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Address,PhoneNumber")] Customer customer)
         {
             if (id != customer.Id)
             {
@@ -118,7 +115,6 @@ namespace Rental.Management.Final.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RentalPropertyId"] = new SelectList(_context.RentalProperties, "Id", "Id", customer.RentalPropertyId);
             return View(customer);
         }
 
@@ -131,7 +127,6 @@ namespace Rental.Management.Final.Controllers
             }
 
             var customer = await _context.Customers
-                .Include(c => c.RentalProperty)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {
@@ -155,14 +150,14 @@ namespace Rental.Management.Final.Controllers
             {
                 _context.Customers.Remove(customer);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CustomerExists(int id)
         {
-            return (_context.Customers?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Customers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

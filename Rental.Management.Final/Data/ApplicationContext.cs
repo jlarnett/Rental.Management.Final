@@ -13,6 +13,6 @@ namespace Rental.Management.Final.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<RentalPayment> RentalPayments { get; set; }
         public DbSet<PropertyImage> PropertyImages { get; set; }
-
+        public DbSet<RentalContract> RentalContracts { get; set; }
     }
 }

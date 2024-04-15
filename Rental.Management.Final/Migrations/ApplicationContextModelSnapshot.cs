@@ -17,7 +17,7 @@ namespace Rental.Management.Final.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.28")
+                .HasAnnotation("ProductVersion", "6.0.29")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -30,9 +30,25 @@ namespace Rental.Management.Final.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int?>("RentalPropertyId")
                         .HasColumnType("int");
@@ -64,6 +80,41 @@ namespace Rental.Management.Final.Migrations
                     b.HasIndex("PropertyId");
 
                     b.ToTable("PropertyImages");
+                });
+
+            modelBuilder.Entity("Rental.Management.Final.Models.RentalContract", b =>
+                {
+                    b.Property<int>("ContractId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContractId"), 1L, 1);
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("PaymentReceived")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RentalPropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ContractId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("RentalPropertyId");
+
+                    b.ToTable("RentalContracts");
                 });
 
             modelBuilder.Entity("Rental.Management.Final.Models.RentalPayment", b =>
@@ -124,11 +175,9 @@ namespace Rental.Management.Final.Migrations
 
             modelBuilder.Entity("Rental.Management.Final.Models.Customer", b =>
                 {
-                    b.HasOne("Rental.Management.Final.Models.RentalProperty", "RentalProperty")
+                    b.HasOne("Rental.Management.Final.Models.RentalProperty", null)
                         .WithMany("Customers")
                         .HasForeignKey("RentalPropertyId");
-
-                    b.Navigation("RentalProperty");
                 });
 
             modelBuilder.Entity("Rental.Management.Final.Models.PropertyImage", b =>
@@ -140,6 +189,23 @@ namespace Rental.Management.Final.Migrations
                         .IsRequired();
 
                     b.Navigation("Property");
+                });
+
+            modelBuilder.Entity("Rental.Management.Final.Models.RentalContract", b =>
+                {
+                    b.HasOne("Rental.Management.Final.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Rental.Management.Final.Models.RentalProperty", "RentalProperty")
+                        .WithMany()
+                        .HasForeignKey("RentalPropertyId");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("RentalProperty");
                 });
 
             modelBuilder.Entity("Rental.Management.Final.Models.RentalPayment", b =>

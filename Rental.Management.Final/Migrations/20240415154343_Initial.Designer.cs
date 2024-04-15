@@ -12,14 +12,14 @@ using Rental.Management.Final.Data;
 namespace Rental.Management.Final.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240412013007_MONEYcHANGE")]
-    partial class MONEYcHANGE
+    [Migration("20240415154343_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.28")
+                .HasAnnotation("ProductVersion", "6.0.29")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -32,9 +32,25 @@ namespace Rental.Management.Final.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int?>("RentalPropertyId")
                         .HasColumnType("int");
@@ -44,6 +60,63 @@ namespace Rental.Management.Final.Migrations
                     b.HasIndex("RentalPropertyId");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Rental.Management.Final.Models.PropertyImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyId");
+
+                    b.ToTable("PropertyImages");
+                });
+
+            modelBuilder.Entity("Rental.Management.Final.Models.RentalContract", b =>
+                {
+                    b.Property<int>("ContractId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContractId"), 1L, 1);
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("PaymentReceived")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RentalPropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ContractId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("RentalPropertyId");
+
+                    b.ToTable("RentalContracts");
                 });
 
             modelBuilder.Entity("Rental.Management.Final.Models.RentalPayment", b =>
@@ -91,9 +164,6 @@ namespace Rental.Management.Final.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<bool>("IsOccupied")
                         .HasColumnType("bit");
 
@@ -107,9 +177,35 @@ namespace Rental.Management.Final.Migrations
 
             modelBuilder.Entity("Rental.Management.Final.Models.Customer", b =>
                 {
-                    b.HasOne("Rental.Management.Final.Models.RentalProperty", "RentalProperty")
+                    b.HasOne("Rental.Management.Final.Models.RentalProperty", null)
                         .WithMany("Customers")
                         .HasForeignKey("RentalPropertyId");
+                });
+
+            modelBuilder.Entity("Rental.Management.Final.Models.PropertyImage", b =>
+                {
+                    b.HasOne("Rental.Management.Final.Models.RentalProperty", "Property")
+                        .WithMany()
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Property");
+                });
+
+            modelBuilder.Entity("Rental.Management.Final.Models.RentalContract", b =>
+                {
+                    b.HasOne("Rental.Management.Final.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Rental.Management.Final.Models.RentalProperty", "RentalProperty")
+                        .WithMany()
+                        .HasForeignKey("RentalPropertyId");
+
+                    b.Navigation("Customer");
 
                     b.Navigation("RentalProperty");
                 });

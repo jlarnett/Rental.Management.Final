@@ -204,8 +204,13 @@ namespace Rental.Management.Final.Controllers
                 return Problem("Entity set 'ApplicationContext.RentalProperties'  is null.");
             }
             var rentalProperty = await _context.RentalProperties.FindAsync(id);
+
             if (rentalProperty != null)
             {
+                var images = _context.PropertyImages.Where(i => i.PropertyId.Equals(id)).ToList();
+                _context.PropertyImages.RemoveRange(images);
+                await _context.SaveChangesAsync();
+
                 _context.RentalProperties.Remove(rentalProperty);
             }
             

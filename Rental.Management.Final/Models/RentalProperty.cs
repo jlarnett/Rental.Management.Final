@@ -14,9 +14,6 @@ public class RentalProperty
     [DisplayName("Daily Fee")]
     public double Price { get; set; }
 
-    [NotMapped]
-    public List<byte[]>? PropertyImages { get; set; }
-
     [FromForm]
     [NotMapped]
     public IFormFileCollection? PropertyFiles { get; set; }
