@@ -48,6 +48,10 @@
                 <input asp-for="CardNumber" class="form-control" />
                 <span asp-validation-for="CardNumber" class="text-danger"></span>
             </div>
+            
+            <div class="form-group h2">
+                @ViewBag.DaysInContract days * @ViewBag.PropertyPrice.ToString("C") = Total @Model.Amount.ToString("C")
+            </div>
 
             @Html.HiddenFor(p => p.Date)
             @Html.HiddenFor(c => c.ContractId)
@@ -62,7 +66,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" asp-controller="RentalProperties">Back to Rental Properties List</a>
 </div>
 
 @section Scripts {
