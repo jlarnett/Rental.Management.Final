@@ -34,5 +34,14 @@ namespace Rental.Management.Final.Models
         public int ContractId { get; set; }
         public RentalContract? Contract { get; set; }
         public DateTime Date { get; set; }
+
+        [DisplayName("Address")]
+        public string BillingAddress { get; set; } = string.Empty;
+
+        [DisplayName("City")]
+        public string BillingCity { get; set; } = string.Empty;
+
+        [DisplayName("Zip Code")]
+        public string BillingZipCode { get; set; } = string.Empty;
     }
 }

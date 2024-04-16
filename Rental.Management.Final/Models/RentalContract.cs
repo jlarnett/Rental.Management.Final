@@ -26,6 +26,5 @@ namespace Rental.Management.Final.Models
         public Customer? Customer { get; set; }
 
         public bool PaymentReceived { get; set; } = false;
-
     }
 }

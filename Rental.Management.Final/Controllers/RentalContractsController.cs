@@ -41,8 +41,6 @@ namespace Rental.Management.Final.Controllers
 
                 var property = await _context.RentalProperties.FindAsync(contract.PropertyId);
                 var totalDaysForContract = contract.EndDate.Subtract(contract.StartDate).Days;
-                var totalContractAmount = totalDaysForContract * property.Price;
-
                 return RedirectToAction(nameof(CreateContractPayment), new {id=newContract.Entity.ContractId, numberOfDaysReserved=totalDaysForContract, propertyPrice=property.Price});
             }
             return View(contract);
@@ -64,7 +62,7 @@ namespace Rental.Management.Final.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateContractPayment([Bind("CardHolderName,CardType,CardNumber,CardExpMonth,CardExpYear,Amount,ContractId,Date")] ContractPayment payment)
+        public async Task<IActionResult> CreateContractPayment([Bind("CardHolderName,CardType,CardNumber,CardExpMonth,CardExpYear,Amount,ContractId,Date,BillingAddress,BillingCity,BillingZipCode")] ContractPayment payment)
         {
 
             if (ModelState.IsValid)
