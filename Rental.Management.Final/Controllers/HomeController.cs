@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Rental.Management.Final.Data;
 using Rental.Management.Final.Views.Home;
 using Rental.Management.Final.Views.RentalProperties;
+using Hangfire;
 
 namespace Rental.Management.Final.Controllers
 {
@@ -21,6 +22,7 @@ namespace Rental.Management.Final.Controllers
 
         public async Task<IActionResult> Index()
         {
+            RecurringJob.AddOrUpdate("OccupiedRentalCheck",() => CheckRentalStatus(),Cron.Hourly);
             var properties = await _context.RentalProperties.Where(p => p.IsOccupied != true).ToListAsync();
 
             List<PropertyVm> propertiesVms = new List<PropertyVm>();
@@ -55,6 +57,29 @@ namespace Rental.Management.Final.Controllers
                 DisplayProperties = propertiesVms
             };
             return View(IndexVm);
+        }
+
+        public async Task CheckRentalStatus()
+        {
+            var properties = await _context.RentalProperties.ToListAsync();
+            foreach (var property in properties)
+            {
+                var contracts = await _context.RentalContracts.Where(c => c.PropertyId.Equals(property.Id) && c.PaymentReceived).ToListAsync();
+                var isOccupied = false;
+
+                foreach (var contract in contracts)
+                {
+                    if(DateTime.UtcNow.Ticks > contract.StartDate.Ticks && DateTime.UtcNow.Ticks < contract.EndDate.Ticks)
+                    {
+                        isOccupied = true;
+                    }
+                }
+
+                property.IsOccupied = isOccupied;
+                _context.Update(property);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public IActionResult Privacy()
