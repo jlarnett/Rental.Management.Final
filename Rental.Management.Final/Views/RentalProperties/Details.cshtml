@@ -81,12 +81,9 @@
         </div>
     </div>
     @{
-        if (!Model.IsOccupied)
-        {
-            <div class="row">
-                <a class="btn btn-outline-warning" asp-controller="RentalContracts" asp-action="Create" asp-route-id="@Model.Id">Reserve Rental</a>
-            </div>
-        }
+        <div class="row">
+            <a class="btn btn-outline-warning" asp-controller="RentalContracts" asp-action="Create" asp-route-id="@Model.Id">Reserve Rental</a>
+        </div>
     }
 </div>
 

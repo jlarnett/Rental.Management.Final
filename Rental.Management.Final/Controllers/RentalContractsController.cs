@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Rental.Management.Final.Data;
 using Rental.Management.Final.Models;
 
@@ -14,9 +15,26 @@ namespace Rental.Management.Final.Controllers
             _context = context;
         }
         // GET: RentalContracts
-        public IActionResult Create(int id)
+        public async Task<IActionResult> Create(int id)
         {
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FirstName");
+            var activeContracts = await _context.RentalContracts.Where(c => c.PropertyId == id && c.PaymentReceived).ToListAsync();
+
+            List<DateTime> disabledDates = new List<DateTime>();
+
+            foreach(var activeContract in activeContracts)
+            {
+                var startingDate = activeContract.StartDate;
+
+                while(startingDate <= activeContract.EndDate)
+                {
+                    disabledDates.Add(startingDate);
+                    startingDate = startingDate.AddDays(1);
+                }
+            }
+
+            string dDates = string.Join(",", disabledDates.Select(c => c.ToString("yyyy-MM-dd")).ToArray());
+            ViewBag.DisabledDates = dDates;
 
             var contract = new RentalContract()
             {
