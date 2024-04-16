@@ -16,8 +16,7 @@
     </div>
 </div> *@
 
-<div class="row">
-    
+<div class="row border-bottom border-warning mb-2">
     <div id="carouselExampleCaptions" class="carousel slide p-0" data-bs-ride="carousel">
         <div class="carousel-indicators">
             @{
@@ -85,4 +84,27 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
+</div>
+<div class="row">
+    
+    @{
+
+
+        for (int i = Model.DisplayProperties.Count - 1; i > Model.DisplayProperties.Count - 4; i--)
+        {
+            var imageByteArray = Model.DisplayProperties[i].PropertyImages.FirstOrDefault();
+            var firstImageString = Convert.ToBase64String(imageByteArray);
+
+            <div class="col-lg-4 border-start border-end border-secondary">
+                <div class="text-center">
+                    <img src="data:image/jpeg;base64, @firstImageString" class="rounded-circle" width="150" height="150"/>
+                </div>
+                <h2 class="text-center text-warning">@Model.DisplayProperties[i].Address</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet velit ut est interdum hendrerit. Sed ut odio est. Phasellus tincidunt enim in tellus rhoncus, eu porta urna egestas. Etiam rhoncus, leo nec vehicula vestibulum, massa risus cursus turpis, in pellentesque nisl mi at purus. Proin sed vulputate ex. Nam varius neque at eros convallis, vitae pulvinar diam aliquet. Sed quis justo eget libero imperdiet tristique sollicitudin sit amet est. Proin lobortis suscipit odio, sit amet efficitur risus scelerisque in. Maecenas ut finibus nisi, eu posuere leo. Curabitur dolor lectus, commodo ut porta sed, semper vitae tellus. Ut feugiat lectus nec felis vehicula, eget dignissim ante rutrum.</p>
+                <p>
+                    <a class="btn btn-outline-danger" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@Model.DisplayProperties[i].Id">View Property</a>
+                </p>
+            </div>
+        }
+    }
 </div>
