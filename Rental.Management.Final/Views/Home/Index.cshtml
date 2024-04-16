@@ -49,7 +49,7 @@
 
                     if (counter == 0)
                     {
-                        <div class="carousel-item active item">
+                        <div class="carousel-item active item" data-bs-interval="4000">
                             <img src="data:image/jpeg;base64, @firstImageString" class="d-block w-100" alt="@item.Description pictures">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>@item.Address</h5>
@@ -60,7 +60,7 @@
                     }
                     else
                     {
-                        <div class="carousel-item item">
+                        <div class="carousel-item item" data-bs-interval="4000">
                             <img src="data:image/jpeg;base64, @firstImageString" class="d-block w-100" alt="@item.Description pictures">
                             <div class="carousel-caption d-none d-md-block">
                                 <h5>@item.Address</h5>
@@ -101,6 +101,7 @@
                 </div>
                 <h2 class="text-center text-warning">@Model.DisplayProperties[i].Address</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sit amet velit ut est interdum hendrerit. Sed ut odio est. Phasellus tincidunt enim in tellus rhoncus, eu porta urna egestas. Etiam rhoncus, leo nec vehicula vestibulum, massa risus cursus turpis, in pellentesque nisl mi at purus. Proin sed vulputate ex. Nam varius neque at eros convallis, vitae pulvinar diam aliquet. Sed quis justo eget libero imperdiet tristique sollicitudin sit amet est. Proin lobortis suscipit odio, sit amet efficitur risus scelerisque in. Maecenas ut finibus nisi, eu posuere leo. Curabitur dolor lectus, commodo ut porta sed, semper vitae tellus. Ut feugiat lectus nec felis vehicula, eget dignissim ante rutrum.</p>
+                <p>Daily Fee : @Model.DisplayProperties[i].Price.ToString("C")</p>
                 <p>
                     <a class="btn btn-outline-danger" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@Model.DisplayProperties[i].Id">View Property</a>
                 </p>
