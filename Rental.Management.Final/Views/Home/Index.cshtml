@@ -3,7 +3,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+@* <div class="text-center">
     <h1 class="display-1 text-warning">
         Welcome 
     </h1>
@@ -14,35 +14,75 @@
     <div class="h3 text-">
         Take a look at some of our available rentals below.
     </div>
-</div>
+</div> *@
 
 <div class="row">
     
-    @{
-        int counter = 0;
+    <div id="carouselExampleCaptions" class="carousel slide p-0" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            @{
+                int indicatorCounter = 0;
 
-        foreach (var property in Model.DisplayProperties)
-        {
-            if (property.PropertyImages.Count > 0)
-            {
-                var firstImageString = Convert.ToBase64String(property.PropertyImages.First());
-
-                if (counter < 3)
+                foreach (var item in Model.DisplayProperties)
                 {
-                    <div class="col">
-                        <div class="card home-card">
-                            <img src="data:image/jpeg;base64, @firstImageString" class="card-img-top" alt="@property.Description">
-                            <div class="card-body">
-                                <h5 class="card-title">@property.Address</h5>
-                                <p class="card-text">@property.Description</p>
-                                <a class="btn btn-outline-warning"  asp-controller="RentalProperties" asp-action="Details" asp-route-id="@property.Id">View Rental</a>
+                    if (indicatorCounter == 0)
+                    {
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    }
+                    else
+                    {
+                        var slideNumber = indicatorCounter + 1;
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@indicatorCounter" aria-label="Slide @slideNumber"></button>
+                    }
+
+                    indicatorCounter++;
+                }
+            }
+        </div>
+        <div class="carousel-inner">
+            @{
+                int counter = 0;
+
+                foreach (var item in Model.DisplayProperties)
+                {
+                    var imageByteArray = item.PropertyImages.FirstOrDefault();
+                    var firstImageString = Convert.ToBase64String(imageByteArray);
+
+                    if (counter == 0)
+                    {
+                        <div class="carousel-item active item">
+                            <img src="data:image/jpeg;base64, @firstImageString" class="d-block w-100" alt="@item.Description pictures">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>@item.Address</h5>
+                                <p>@item.Description</p>
+                                <a class="btn btn-outline-danger" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@item.Id">View Property</a>
                             </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="carousel-item item">
+                            <img src="data:image/jpeg;base64, @firstImageString" class="d-block w-100" alt="@item.Description pictures">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>@item.Address</h5>
+                                <p>@item.Description</p>
+                                <a class="btn btn-outline-danger" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@item.Id">View Property</a>
+                            </div>
+                        </div>
+                    }
+
+
                     counter++;
                 }
             }
-        }
-    }
-
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
 </div>
