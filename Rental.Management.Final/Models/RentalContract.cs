@@ -11,7 +11,6 @@ namespace Rental.Management.Final.Models
         [Key]
         public int ContractId { get; set; }
 
-
         [DisplayName("Start Date")]
         public DateTime StartDate { get; set; }
 
