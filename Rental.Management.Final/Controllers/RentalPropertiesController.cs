@@ -225,20 +225,20 @@ namespace Rental.Management.Final.Controllers
 
         private async Task SaveImages(int propertyId, IFormFileCollection files)
         {
-
-            foreach (var file in files)
+            if(files != null)
             {
-                using var ms = new MemoryStream();
-                await file.CopyToAsync(ms);
-
-                await _context.PropertyImages.AddAsync(new PropertyImage()
+                foreach (var file in files)
                 {
-                    Image = ms.ToArray(),
-                    PropertyId = propertyId
-                });
+                    using var ms = new MemoryStream();
+                    await file.CopyToAsync(ms);
+
+                    await _context.PropertyImages.AddAsync(new PropertyImage()
+                    {
+                        Image = ms.ToArray(),
+                        PropertyId = propertyId
+                    });
+                }
             }
-
-
             await _context.SaveChangesAsync();
         }
 
