@@ -15,7 +15,7 @@ public class RentalProperty
     [DisplayName("Property Address")]
     public string Address { get; set; } = string.Empty;
 
-    [DisplayName("Currently Occupied")]
+    [DisplayName("Occupied")]
     public bool IsOccupied { get; set; } = false;
 
     [DisplayName("Daily Fee")]

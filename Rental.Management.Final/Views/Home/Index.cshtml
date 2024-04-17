@@ -106,7 +106,7 @@
                         <div class="text-center">
                             <img src="data:image/jpeg;base64, @firstImageString" class="rounded-circle" width="150" height="150" />
                         </div>
-                        <h2 class="text-center text-warning">@Model.DisplayProperties[i].Address</h2>
+                        <a class="h3 text-decoration-none text-truncate btn-link text-center text-warning text" role="button" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@Model.DisplayProperties[i].Id">@Model.DisplayProperties[i].Address</a>
                         <p>@Model.DisplayProperties[i].Description</p>
                         <p>Daily Fee : @Model.DisplayProperties[i].Price.ToString("C")</p>
                         <p>

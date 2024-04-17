@@ -4,13 +4,13 @@
     //ViewData["Title"] = "Create";
 }
 
-<h2 class="text-center">Pay For Reservation</h2>
+<h2 class="text-center text-warning">Pay For Reservation</h2>
 <hr />
 <div class="row">
     <form asp-action="CreateContractPayment" asp-controller="RentalContracts">
         <div class="col row">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="h2">Billing Address</div>
+            <div class="h2 text-warning">Billing Address</div>
             <div class="form-group">
                 <label asp-for="BillingAddress" class="control-label"></label>
                 <input asp-for="BillingAddress" class="form-control"/>
@@ -28,7 +28,7 @@
             </div>
             
             <hr class="mt-4 mb-4"/>
-            <div class="h2">Card Details</div>
+            <div class="h2 text-warning">Card Details</div>
             <div class="form-group">
                 <label asp-for="CardHolderName" class="control-label"></label>
                 <input asp-for="CardHolderName" class="form-control"/>
