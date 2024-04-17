@@ -8,8 +8,14 @@ namespace Rental.Management.Final.Views.RentalProperties
     public class PropertyVm
     {
         public int Id { get; set; }
+
+        [DisplayName("Property Description")]
         public string Description { get; set; } = string.Empty;
+
+        [DisplayName("Property Address")]
         public string Address { get; set; } = string.Empty;
+
+        [DisplayName("Currently Occupied")]
         public bool IsOccupied { get; set; } = false;
 
         [DisplayName("Daily Fee")]

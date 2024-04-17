@@ -56,6 +56,7 @@ namespace Rental.Management.Final.Controllers
             {
                 DisplayProperties = propertiesVms
             };
+
             return View(IndexVm);
         }
 
