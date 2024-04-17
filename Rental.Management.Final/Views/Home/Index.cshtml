@@ -16,79 +16,83 @@
     </div>
 </div> *@
 
-<div class="row border-bottom border-warning mb-2">
-    <div id="carouselExampleCaptions" class="carousel slide p-0" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            @{
-                int indicatorCounter = 0;
+@if (Model.DisplayProperties.Count > 0)
+{
+    <div class="row border-bottom border-warning mb-2">
+        <div id="carouselExampleCaptions" class="carousel slide p-0" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                @{
+                    int indicatorCounter = 0;
 
-                foreach (var item in Model.DisplayProperties)
-                {
-                    if (indicatorCounter == 0)
+                    foreach (var item in Model.DisplayProperties)
                     {
-                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    }
-                    else
-                    {
-                        var slideNumber = indicatorCounter + 1;
-                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@indicatorCounter" aria-label="Slide @slideNumber"></button>
-                    }
-
-                    indicatorCounter++;
-                }
-            }
-        </div>
-        <div class="carousel-inner">
-            @{
-                int counter = 0;
-
-                foreach (var item in Model.DisplayProperties)
-                {
-                    var imageByteArray = item.PropertyImages.FirstOrDefault();
-
-                    if(imageByteArray != null)
-                    {
-                        var firstImageString = Convert.ToBase64String(imageByteArray);
-
-                        if (counter == 0)
+                        if (indicatorCounter == 0)
                         {
-                            <div class="carousel-item active item" data-bs-interval="4000">
-                                <img src="data:image/jpeg;base64, @firstImageString" class="d-block w-100" alt="@item.Description pictures">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h3>@item.Address</h3>
-                                    <a class="btn btn-success" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@item.Id">View Property</a>
-                                </div>
-                            </div>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                         }
                         else
                         {
-                            <div class="carousel-item item" data-bs-interval="4000">
-                                <img src="data:image/jpeg;base64, @firstImageString" class="d-block w-100" alt="@item.Description pictures">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <h3>@item.Address</h3>
-                                    <a class="btn btn-success" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@item.Id">View Property</a>
-                                </div>
-                            </div>
+                            var slideNumber = indicatorCounter + 1;
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="@indicatorCounter" aria-label="Slide @slideNumber"></button>
                         }
 
-                        counter++;
+                        indicatorCounter++;
                     }
                 }
-            }
+            </div>
+            <div class="carousel-inner">
+                @{
+                    int counter = 0;
+
+                    foreach (var item in Model.DisplayProperties)
+                    {
+                        var imageByteArray = item.PropertyImages.FirstOrDefault();
+
+                        if (imageByteArray != null)
+                        {
+                            var firstImageString = Convert.ToBase64String(imageByteArray);
+
+                            if (counter == 0)
+                            {
+                                <div class="carousel-item active item" data-bs-interval="4000">
+                                    <img src="data:image/jpeg;base64, @firstImageString" class="d-block w-100" alt="@item.Description pictures">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h3>@item.Address</h3>
+                                        <a class="btn btn-success" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@item.Id">View Property</a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="carousel-item item" data-bs-interval="4000">
+                                    <img src="data:image/jpeg;base64, @firstImageString" class="d-block w-100" alt="@item.Description pictures">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h3>@item.Address</h3>
+                                        <a class="btn btn-success" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@item.Id">View Property</a>
+                                    </div>
+                                </div>
+                            }
+
+                            counter++;
+                        }
+                    }
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </div>
-</div>
+}
+
 <div class="row">
     @{
-        if(Model.DisplayProperties.Count > 3)
+        if(Model.DisplayProperties.Count >= 3)
         {
             for (int i = Model.DisplayProperties.Count - 1; i > Model.DisplayProperties.Count - 4; i--)
             {
@@ -109,8 +113,6 @@
                             <a class="btn btn-outline-danger" asp-controller="RentalProperties" asp-action="Details" asp-route-id="@Model.DisplayProperties[i].Id">View Property</a>
                         </p>
                     </div>
-
-                    counter++;
                 }
             }
         }

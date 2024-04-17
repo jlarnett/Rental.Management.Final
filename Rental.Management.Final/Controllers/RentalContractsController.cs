@@ -14,11 +14,20 @@ namespace Rental.Management.Final.Controllers
         {
             _context = context;
         }
-        // GET: RentalContracts
+
+        public async Task<IActionResult> Index()
+        {
+            var contracts = await _context.RentalContracts.Include(c => c.Customer).Include(c => c.RentalProperty)
+                .ToListAsync();
+            return _context.RentalContracts != null ? 
+                View(contracts) :
+                Problem("Entity set 'ApplicationContext.RentalContracts'  is null.");
+        }
+
         public async Task<IActionResult> Create(int id)
         {
             ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "FirstName");
-            var activeContracts = await _context.RentalContracts.Where(c => c.PropertyId == id && c.PaymentReceived).ToListAsync();
+            var activeContracts = await _context.RentalContracts.Where(c => c.RentalPropertyId == id && c.PaymentReceived).ToListAsync();
 
             List<DateTime> disabledDates = new List<DateTime>();
 
@@ -38,7 +47,7 @@ namespace Rental.Management.Final.Controllers
 
             var contract = new RentalContract()
             {
-                PropertyId = id,
+                RentalPropertyId = id,
                 StartDate = DateTime.UtcNow,
                 EndDate = DateTime.UtcNow.AddDays(1)
             };
@@ -48,7 +57,7 @@ namespace Rental.Management.Final.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ContractId,StartDate,EndDate,PropertyId,CustomerId")] RentalContract contract)
+        public async Task<IActionResult> Create([Bind("ContractId,StartDate,EndDate,RentalPropertyId,CustomerId")] RentalContract contract)
         {
 
             if (ModelState.IsValid)
@@ -57,7 +66,7 @@ namespace Rental.Management.Final.Controllers
                 await _context.SaveChangesAsync();
 
 
-                var property = await _context.RentalProperties.FindAsync(contract.PropertyId);
+                var property = await _context.RentalProperties.FindAsync(contract.RentalPropertyId);
                 var totalDaysForContract = contract.EndDate.Subtract(contract.StartDate).Days;
                 return RedirectToAction(nameof(CreateContractPayment), new {id=newContract.Entity.ContractId, numberOfDaysReserved=totalDaysForContract, propertyPrice=property.Price});
             }

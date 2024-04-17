@@ -25,7 +25,7 @@
                 <label asp-for="CustomerId" class="control-label"></label>
                 <select asp-for="CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
             </div>
-            @Html.HiddenFor(c => c.PropertyId)
+            @Html.HiddenFor(c => c.RentalPropertyId)
             <div class="form-group d-grid gap-2">
                 <input type="submit" value="Create" class="btn btn-outline-success"/>
             </div>

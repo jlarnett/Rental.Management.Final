@@ -65,7 +65,7 @@ namespace Rental.Management.Final.Controllers
             var properties = await _context.RentalProperties.ToListAsync();
             foreach (var property in properties)
             {
-                var contracts = await _context.RentalContracts.Where(c => c.PropertyId.Equals(property.Id) && c.PaymentReceived).ToListAsync();
+                var contracts = await _context.RentalContracts.Where(c => c.RentalPropertyId.Equals(property.Id) && c.PaymentReceived).ToListAsync();
                 var isOccupied = false;
 
                 foreach (var contract in contracts)

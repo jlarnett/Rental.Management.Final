@@ -148,7 +148,7 @@ namespace Rental.Management.Final.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContractId"), 1L, 1);
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
@@ -156,9 +156,6 @@ namespace Rental.Management.Final.Migrations
 
                     b.Property<bool>("PaymentReceived")
                         .HasColumnType("bit");
-
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
 
                     b.Property<int?>("RentalPropertyId")
                         .HasColumnType("int");
@@ -235,9 +232,7 @@ namespace Rental.Management.Final.Migrations
                 {
                     b.HasOne("Rental.Management.Final.Models.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("Rental.Management.Final.Models.RentalProperty", "RentalProperty")
                         .WithMany()

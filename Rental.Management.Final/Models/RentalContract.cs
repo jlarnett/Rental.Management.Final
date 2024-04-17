@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Rental.Management.Final.Models
 {
@@ -19,11 +20,14 @@ namespace Rental.Management.Final.Models
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
-        public int PropertyId { get; set; }
+        [AllowNull]
+        public int? RentalPropertyId { get; set; }
+
+        [AllowNull]
         public RentalProperty? RentalProperty { get; set; }
 
         [DisplayName("Customer")]
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public Customer? Customer { get; set; }
 
         public bool PaymentReceived { get; set; } = false;
