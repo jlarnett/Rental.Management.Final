@@ -4,19 +4,21 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="row mt-1">
+<div class="row mt-1 mb-1">
     <div class="col"></div>
     <a asp-action="Create" class="btn btn-success col">Rental Contracts</a>
     <div class="col"></div>
 </div>
 
-<table class="table">
+<h1 class="text-warning">Contracts</h1>
+
+<table class="table table-striped table-hover">
     <thead>
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.CustomerId)
         </th>
-        <th>
+        <th class="col-6">
             @Html.DisplayNameFor(model => model.RentalPropertyId)
         </th>
             <th class="col-1">

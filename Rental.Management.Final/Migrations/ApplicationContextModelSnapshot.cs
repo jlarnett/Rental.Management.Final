@@ -204,7 +204,7 @@ namespace Rental.Management.Final.Migrations
                     b.HasOne("Rental.Management.Final.Models.RentalContract", "Contract")
                         .WithMany()
                         .HasForeignKey("ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Contract");
@@ -222,7 +222,7 @@ namespace Rental.Management.Final.Migrations
                     b.HasOne("Rental.Management.Final.Models.RentalProperty", "Property")
                         .WithMany()
                         .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Property");
@@ -237,7 +237,7 @@ namespace Rental.Management.Final.Migrations
                     b.HasOne("Rental.Management.Final.Models.RentalProperty", "RentalProperty")
                         .WithMany()
                         .HasForeignKey("RentalPropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Customer");

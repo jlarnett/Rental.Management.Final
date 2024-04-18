@@ -45,6 +45,13 @@ namespace Rental.Management.Final.Controllers
             string dDates = string.Join(",", disabledDates.Select(c => c.ToString("yyyy-MM-dd")).ToArray());
             ViewBag.DisabledDates = dDates;
 
+            ViewData["RentalPropertyId"] = new SelectList(_context.RentalProperties, "Id", "Description");
+
+            if (id == 0)
+                ViewBag.PropertyIdSupplied = false;
+            else
+                ViewBag.PropertyIdSupplied = false;
+
             var contract = new RentalContract()
             {
                 RentalPropertyId = id,
@@ -107,11 +114,81 @@ namespace Rental.Management.Final.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
-                return RedirectToAction(nameof(CreateContractPayment));
+                return RedirectToAction(nameof(PaymentConfirmation));
             }
             return View(payment);
         }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.RentalContracts == null)
+            {
+                return NotFound();
+            }
+
+            var rentalContract = await _context.RentalContracts.FindAsync(id);
+
+            if (rentalContract == null)
+            {
+                return NotFound();
+            }
+            ViewBag.PropertyIdSupplied = true;
+
+            return View(rentalContract);
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.RentalProperties == null)
+            {
+                return NotFound();
+            }
+
+            var rentalContract = await _context.RentalContracts
+                .FirstOrDefaultAsync(m => m.ContractId == id);
+
+            if (rentalContract == null)
+            {
+                return NotFound();
+            }
+
+            return View(rentalContract);
+        }
+
+        // POST: RentalProperties/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.RentalContracts == null)
+            {
+                return Problem("Entity set 'ApplicationContext.RentalContracts'  is null.");
+            }
+            var rentalContract = await _context.RentalContracts.FindAsync(id);
+
+            if (rentalContract == null)
+            {
+                return NotFound();
+            }
+            //Remove old payments connected to contract before deleting contract
+            var connectedPayments = await _context.ContractPayments.Where(c => c.ContractId.Equals(id)).ToListAsync();
+            _context.ContractPayments.RemoveRange(connectedPayments);
+            await _context.SaveChangesAsync();
+
+            _context.RentalContracts.Remove(rentalContract); 
+            var rowsChanged = await _context.SaveChangesAsync();
+
+            if (rowsChanged > 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return RedirectToAction("Delete");
+        }
+
+        public async Task<IActionResult> PaymentConfirmation(int id)
+        {
+            return View("PaymentConfirmation");
+        }
     }
-
-
 }

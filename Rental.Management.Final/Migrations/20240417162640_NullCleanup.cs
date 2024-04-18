@@ -28,7 +28,7 @@ namespace Rental.Management.Final.Migrations
                 column: "RentalPropertyId",
                 principalTable: "RentalProperties",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
